@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+  
+  <include file="$(find tankbot)/launch/xacrodisplay_common.launch">
+    <arg name="robot_description" value="$(find xacro)/xacro.py $(find tankbot)/urdf/tankbot.urdf.xacro"/>  
+  </include>  
+  
+</launch>
