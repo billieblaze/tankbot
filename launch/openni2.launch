@@ -24,7 +24,9 @@
   <arg name="depth_camera_info_url" default="" />
 
   <arg name="depth_registration" default="false"
-       doc="Hardware depth registration" />
+       doc=" depth registration" />
+  <arg name="hw_registration" default="false" />
+  <arg name="sw_registration" default="true" />
 
   <!-- Driver parameters -->
   <arg name="color_depth_synchronization"     default="false" />
@@ -51,10 +53,8 @@
   <arg name="depth_registered_processing"     default="true" />
   <arg name="disparity_processing"            default="false" />
   <arg name="disparity_registered_processing" default="false" />
-  <arg name="hw_registered_processing"        default="true" if="$(arg depth_registration)" />
-  <arg name="sw_registered_processing"        default="false" if="$(arg depth_registration)" />
-  <arg name="hw_registered_processing"        default="false" unless="$(arg depth_registration)" />
-  <arg name="sw_registered_processing"        default="true" unless="$(arg depth_registration)" />
+  <arg name="hw_registered_processing"        default="$(arg hw_registration)" />
+  <arg name="sw_registered_processing"        default="$(arg sw_registration)" />
 
   <arg name="respawn" default="true"
        doc="Disable bond topics by default" />
