@@ -47,12 +47,12 @@
   <arg name="publish_tf" default="true" />
   <!-- Processing Modules -->
   <arg name="rgb_processing"                  default="true"  />
-  <arg name="debayer_processing"              default="false" />
+  <arg name="debayer_processing"              default="true" />
   <arg name="ir_processing"                   default="true" />
   <arg name="depth_processing"                default="true" />
   <arg name="depth_registered_processing"     default="true" />
-  <arg name="disparity_processing"            default="false" />
-  <arg name="disparity_registered_processing" default="false" />
+  <arg name="disparity_processing"            default="true" />
+  <arg name="disparity_registered_processing" default="true" />
   <arg name="hw_registered_processing"        default="$(arg hw_registration)" />
   <arg name="sw_registered_processing"        default="$(arg sw_registration)" />
 
@@ -119,7 +119,7 @@
   </group> <!-- camera -->
 
   <!-- Use same nodelet used by Freenect/OpenNI -->
-  <group ns="camera">
+  <group ns="camera_throttle">
     <node pkg="nodelet" type="nodelet" name="data_throttle" args="load rtabmap_ros/data_throttle camera_nodelet_manager" output="screen">
       <param name="rate" type="double" value="$(arg rate)"/>
       <param name="decimation" type="int" value="$(arg decimation)"/>
