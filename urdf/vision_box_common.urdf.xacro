@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find hector_xacro_tools)/urdf/inertia_tensors.urdf.xacro"/>
+  <xacro:include filename="$(find hector_xacro_tools)/urdf/sensor_macros.urdf.xacro"/>
+  <xacro:include filename="$(find hector_sensors_description)/urdf/asus_camera.urdf.xacro"/>
+  <xacro:include filename="$(find tankbot)/urdf/spinning_lidar_mount.urdf.xacro" />
+  <xacro:include filename="$(find hector_components_description)/urdf/vision_box_common.gazebo.xacro" />
+  <xacro:include filename="$(find hector_components_description)/urdf/vision_box_common_dimensions.urdf.xacro" />
+
+  <xacro:macro name="vision_box" params="box_type parent *origin">
+
+    <joint name="top_box_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="top_box_link"/>
+    </joint>
+
+    <link name="top_box_link">
+      <xacro:inertial_cuboid mass="0.1" x_length="0.3" y_length="0.15" z_length="0.2"/>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://hector_components_description/meshes/vision_box/${box_type}_top_box$(optenv TEST_SELF_FILTER).dae"/>
+          <!--<box size="0.001 0.01 0.01" />-->
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="${top_box_pos_x} ${top_box_pos_y} ${top_box_pos_z}" rpy="0 0 0"/>
+        <geometry>
+          <!--<mesh filename="package://monstertruck_urdf/Media/meshes/$(env ROBOT)_top_box.stl"/>-->
+          <box size="${top_box_size_x} ${top_box_size_y} ${top_box_size_z}"/>
+          <!--<box size="0.001 0.01 0.01" />-->
+        </geometry>
+      </collision>
+    </link>
+
+    <xacro:asus_camera_model name="camera" parent="top_box_link">
+      <origin xyz="${x_pos_sensor_head_rel_to_base_link} 0 0.137" rpy="${kinect_roll_position} ${kinect_pitch_position} ${kinect_yaw_position}"/>
+    </xacro:asus_camera_model>
+
+    <xacro:spinning_lidar_macro name="laser" parent="top_box_link" angle_deg="0">
+      <origin xyz="${x_vision_box_front} 0 0.2" rpy="0 0 0"/>
+    </xacro:spinning_lidar_macro>
+
+    <xacro:vision_box_common_gazebo_plugins/>
+
+    <!--   <xacro:include filename="$(find monstertruck_urdf)/hector/$(env ROBOT)_addons.urdf.xacro" />-->
+  </xacro:macro>
+</robot>
