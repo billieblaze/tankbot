@@ -69,7 +69,7 @@
 
   <!-- Push down all topics/nodelets into "camera" namespace -->
   <group ns="$(arg camera)">
-  
+
 	  <!-- Start nodelet manager -->
 	  <arg name="manager" value="$(arg camera)_nodelet_manager" />
 	  <arg name="debug" default="false" /> <!-- Run manager in GDB? -->
@@ -116,10 +116,7 @@
       <arg name="sw_registered_processing"        value="$(arg sw_registered_processing)" />
     </include>
 
-  </group> <!-- camera -->
 
-  <!-- Use same nodelet used by Freenect/OpenNI -->
-  <group ns="camera">
     <node pkg="nodelet" type="nodelet" name="data_throttle" args="load rtabmap_ros/data_throttle camera_nodelet_manager" output="screen">
       <param name="rate" type="double" value="$(arg rate)"/>
       <param name="decimation" type="int" value="$(arg decimation)"/>
@@ -133,7 +130,7 @@
       <remap from="depth/image_out"     to="data_throttled_image_depth"/>
       <remap from="rgb/camera_info_out" to="data_throttled_camera_info"/>
     </node>
-  </group>      
+  </group>
   <!-- Load reasonable defaults for the relative pose between cameras -->
   <include if="$(arg publish_tf)"
            file="$(find rgbd_launch)/launch/kinect_frames.launch">
