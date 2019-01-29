@@ -196,20 +196,20 @@
 	  <param name="Mem/InitWMWithAllNodes" type="string" value="$(arg localization)"/>
     </node>
   
-  </group>
 
+ <!-- Construct point cloud of the latest throttled data -->
+  <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb">
+    <remap from="rgb/image"       to="/camera/data_throttled_image_relay"/>
+    <remap from="depth/image"     to="/camera/data_throttled_image_depth_relay"/>
+    <remap from="rgb/camera_info" to="/camera/data_throttled_camera_info_relay"/>
+    <remap from="cloud"           to="voxel_cloud" />
 
- <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb" output="screen">
-    <remap from="rgbd_image" to="rgbd_image_relay"/>
-    <remap from="cloud"             to="voxel_cloud" />
-
-    <param name="decimation"  type="double" value="4"/>
-    <param name="voxel_size"  type="double" value="0.05"/>
-    <param name="approx_sync" type="bool"   value="true"/>
+    <param name="queue_size" type="int" value="10"/>
+    <param name="voxel_size" type="double" value="0.01"/>
   </node>
 
   <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depth_to_laser" args="image:=/camera/depth_registered/image_raw camera_info:=/camera/depth_registered/camera_info"/>
-
+</group>
 <group ns="planner">
       <remap from="openni_points" to="/planner_cloud"/>
       <remap from="map" to="/rtabmap/proj_map"/>
