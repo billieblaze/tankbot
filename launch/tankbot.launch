@@ -22,8 +22,8 @@
       <param name="grid_eroded"         type="bool" value="true"/>
       <param name="grid_cell_size"      type="double" value="0.05"/>
 
-      <remap from="odom"    to="/base_controller/odom"/>
-      <remap from="scan"    to="/base_scan"/>
+      <remap from="odom"    to="/rtabmap/odom"/>
+      <remap from="scan"    to="/scan"/>
       <remap from="mapData" to="mapData"/>
 
       <remap from="rgb/image"       to="/camera/rgb/image_rect_color"/>
