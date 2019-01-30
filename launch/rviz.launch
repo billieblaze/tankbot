@@ -1,19 +1,10 @@
 <?xml version="1.0"?>
 
 <launch>
-  
+
   <include file="$(find tankbot)/launch/xacrodisplay_common.launch">
-    <arg name="robot_description" value="$(find xacro)/xacro.py $(find tankbot)/urdf/tankbot.urdf.xacro"/>  
-  </include>  
+    <arg name="robot_description" value="$(find xacro)/xacro.py $(find tankbot)/urdf/tankbot.urdf.xacro"/>
+  </include>
 
- <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb" output="screen">
-    <remap from="rgbd_image" to="rgbd_image_relay"/>
-    <remap from="cloud"             to="voxel_cloud" />
- 
-    <param name="decimation"  type="double" value="4"/>
-    <param name="voxel_size"  type="double" value="0.0"/>
-    <param name="approx_sync" type="bool"   value="true"/>
-  </node>
 
-  
 </launch>
