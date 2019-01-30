@@ -78,7 +78,7 @@
     <param name="voxel_size" type="double" value="0.01"/>
   </node>
 
-  <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depth_to_laser" args="image:=/camera/depth/image_raw camera_info:=/camera/rgb_camera_info"/>
+<!--  <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depth_to_laser" args="image:=/camera/depth/image_raw camera_info:=/camera/rgb_camera_info"/>-->
 
   <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection stereo_nodelet">
      <remap from="cloud" to="/voxel_cloud"/>
