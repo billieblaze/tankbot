@@ -23,7 +23,7 @@
             See camera_info_manager docs for calibration URL details." />
   <arg name="depth_camera_info_url" default="" />
 
-  <arg name="depth_registration" default="false"
+  <arg name="depth_registration" default="true"
        doc=" depth registration" />
   <arg name="hw_registration" default="false" />
   <arg name="sw_registration" default="true" />
