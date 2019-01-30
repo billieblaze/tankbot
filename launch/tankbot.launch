@@ -11,14 +11,14 @@
     <arg name="depth_registration" value="True" />
   </include>
 
-<!--  <include file="$(find rtabmap_ros)/launch/rtabmap.launch"/>-->
+ <!-- <include file="$(find rtabmap_ros)/launch/rtabmap.launch"/> -->
 
   <group ns="rtabmap">
     <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="$(arg rtabmap_args)">
       <param name="frame_id"            type="string" value="base_footprint"/>
       <param name="subscribe_scan"      type="bool" value="true"/>
       <param name="use_action_for_goal" type="bool" value="true"/>
-      <param name="cloud_decimation"    type="int" value="1"/>     <!-- we already decimate in memory below -->
+      <param name="cloud_decimation"    type="int" value="1"/>
       <param name="grid_eroded"         type="bool" value="true"/>
       <param name="grid_cell_size"      type="double" value="0.05"/>
 
@@ -30,11 +30,10 @@
       <remap from="depth/image"     to="/camera/depth_registered/image_raw"/>
       <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
 
-      <remap from="goal_out"  to="current_goal"/>	
+      <remap from="goal_out"  to="current_goal"/>
       <remap from="move_base" to="/planner/move_base"/>
       <remap from="grid_map"  to="/map"/>
 
-      <!-- RTAB-Map's parameters -->
 
     <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
     <param name="RGBD/ProximityBySpace" type="string" value="true"/>
@@ -43,19 +42,18 @@
     <param name="RGBD/AngularUpdate" type="string" value="0.01"/>
     <param name="RGBD/LinearUpdate" type="string" value="0.01"/>
 
-      <!-- localization mode -->
       <param     if="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="false"/>
       <param unless="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="true"/>
       <param name="Mem/InitWMWithAllNodes" type="string" value="$(arg localization)"/>
     </node>
-  
+
      <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry" output="screen">
           <remap from="rgb/image"       to="/camera/rgb/image_rect_color"/>
           <remap from="depth/image"     to="/camera/depth_registered/image_raw"/>
           <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
           <remap  from="rgbd_image" to="/camera/rgb/image_rect_color"/>
           <remap from="odom"            to="odom"/>
-      
+
           <param name="frame_id"                    type="string" value="camera_link"/>
           <param name="odom_frame_id"               type="string" value="odom"/>
           <param name="ground_truth_frame_id"       type="string" value=""/>
@@ -69,7 +67,7 @@
           <param name="guess_min_rotation"          type="double" value="0"/>
         </node>
 </group>
- 
+
   <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb">
     <remap from="rgb/image"       to="/camera/rgb/image_rect_color"/>
     <remap from="depth/image"     to="/camera/depth_registered/image_raw"/>
@@ -81,5 +79,29 @@
   </node>
 
   <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depth_to_laser" args="image:=/camera/depth/image_raw camera_info:=/camera/rgb_camera_info"/>
+
+  <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection stereo_nodelet">
+     <remap from="cloud" to="/voxel_cloud"/>
+     <remap from="obstacles" to="/planner_cloud"/>
+
+     <param name="frame_id" type="string" value="base_footprint"/>
+     <param name="map_frame_id" type="string" value="map"/>
+     <param name="min_cluster_size" type="int" value="20"/>
+     <param name="max_obstacles_height" type="double" value="0.0"/>
+   </node>
+
+  <group ns="planner">
+      <remap from="openni_points" to="/planner_cloud"/>
+      <remap from="map" to="/rtabmap/proj_map"/>
+      <remap from="move_base_simple/goal" to="/planner_goal"/>
+
+      <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+         <rosparam file="$(find tankbot)/yaml/costmap_common_params.yaml" command="load" ns="global_costmap" />
+         <rosparam file="$(find tankbot)/yaml/costmap_common_params.yaml" command="load" ns="local_costmap" />
+         <rosparam file="$(find tankbot)/yaml/local_costmap_params.yaml" command="load" />
+         <rosparam file="$(find tankbot)/yaml/global_costmap_params.yaml" command="load" />
+         <rosparam file="$(find tankbot)/yaml/base_local_planner_params.yaml" command="load" />
+      </node>
+   </group>
 
 </launch>

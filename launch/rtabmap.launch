@@ -169,7 +169,17 @@
 
   <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depth_to_laser" args="image:=$(arg depth_topic) camera_info:=$(arg camera_info_topic)"/>
 
-<group ns="planner">
+  <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection stereo_nodelet">
+     <remap from="cloud" to="/voxel_cloud"/>
+     <remap from="obstacles" to="/planner_cloud"/>
+
+     <param name="frame_id" type="string" value="base_footprint"/>
+     <param name="map_frame_id" type="string" value="map"/>
+     <param name="min_cluster_size" type="int" value="20"/>
+     <param name="max_obstacles_height" type="double" value="0.0"/>
+   </node>
+   
+  <group ns="planner">
       <remap from="openni_points" to="/planner_cloud"/>
       <remap from="map" to="/rtabmap/proj_map"/>
       <remap from="move_base_simple/goal" to="/planner_goal"/>
@@ -182,28 +192,7 @@
          <rosparam file="$(find tankbot)/yaml/base_local_planner_params.yaml" command="load" />
       </node>
    </group>
-<!--
-  <group ns="/stereo_camera" >
 
-      <node pkg="nodelet" type="nodelet" name="disparity2cloud" args="load rtabmap_ros/point_cloud_xyz stereo_nodelet">
-         <remap from="disparity/image"       to="disparity"/>
-         <remap from="disparity/camera_info" to="right/camera_info_throttle"/>
-         <remap from="cloud"                to="cloudXYZ"/>
 
-         <param name="voxel_size" type="double" value="0.05"/>
-         <param name="decimation" type="int" value="4"/>
-         <param name="max_depth" type="double" value="4"/>
-      </node>
-
-      <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection stereo_nodelet">
-         <remap from="cloud" to="cloudXYZ"/>
-         <remap from="obstacles" to="/planner_cloud"/>
-
-         <param name="frame_id" type="string" value="base_footprint"/>
-         <param name="map_frame_id" type="string" value="map"/>
-         <param name="min_cluster_size" type="int" value="20"/>
-         <param name="max_obstacles_height" type="double" value="0.0"/>
-       </node>
-   </group>-->
 
 </launch>
