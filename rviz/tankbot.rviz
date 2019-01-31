@@ -5,7 +5,11 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /TF1/Status1
         - /TF1/Frames1
+        - /Odometry1
+        - /Info1
+        - /Info1/Status1
       Splitter Ratio: 0.411058009
     Tree Height: 360
   - Class: rviz/Selection
@@ -144,6 +148,11 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
+        base_footprint:
+          base_link:
+            top_box_link:
+              laser_spinning_lidar_root_link:
+                {}
         odom:
           camera_link:
             camera_depth_frame:
@@ -200,7 +209,41 @@ Visualization Manager:
         Shaft Length: 1
         Shaft Radius: 0.0500000007
         Value: Arrow
-      Topic: /rtabmap/odom
+      Topic: /odom
+      Unreliable: false
+      Value: true
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.300000012
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 100
+      Name: NavioOdometry
+      Position Tolerance: 0.100000001
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.100000001
+        Color: 255; 25; 0
+        Head Length: 0.300000012
+        Head Radius: 0.100000001
+        Shaft Length: 1
+        Shaft Radius: 0.0500000007
+        Value: Arrow
+      Topic: /mavros/local_position/odom
       Unreliable: false
       Value: true
     - Class: rviz/Image
@@ -417,10 +460,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.534795523
+      Pitch: 0.634795904
       Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 3.39417648
+      Yaw: 4.55919218
     Saved: ~
 Window Geometry:
   Displays:
@@ -440,5 +483,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1387
-  X: 46
+  X: 44
   Y: 24
