@@ -74,8 +74,9 @@
       </joint>
 
       <link name="${name}_rgb_optical_frame"/>
+    -->
     </xacro:macro>
--->
+
     <!--
      The asus_camera macro only adds the model, and also adds
      the openni gazebo plugin.
